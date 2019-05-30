@@ -1,0 +1,2 @@
+# serverless-express
+aws-serverless-expressを使ってLambda上でexpressサーバーを起動させる
