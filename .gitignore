@@ -62,6 +62,7 @@ typings/
 
 # Serverless directories
 .serverless
+dist
 
 # IDEA Setting Files
 .idea

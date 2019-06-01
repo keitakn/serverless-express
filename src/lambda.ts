@@ -27,12 +27,10 @@ const server = awsServerlessExpress.createServer(
   binaryMimeTypes,
 );
 
-const expressHandler = (
+export const expressHandler = (
   event: lambda.APIGatewayEvent,
   context: lambda.Context,
   callback: lambda.Callback,
 ) => {
   return awsServerlessExpress.proxy(server, event, context);
 };
-
-export default expressHandler;

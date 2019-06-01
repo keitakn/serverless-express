@@ -1,0 +1,50 @@
+service: serverless-express
+
+plugins:
+  - serverless-prune-plugin
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  stage: ${env:DEPLOY_STAGE}
+  region: ap-northeast-1
+  profile: ${self:custom.profiles.${self:provider.stage}}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - logs:CreateLogGroup
+        - logs:CreateLogStream
+        - logs:PutLogEvents
+      Resource: "*"
+  environment:
+    DEPLOY_STAGE: ${env:DEPLOY_STAGE}
+    NODE_ENV: production
+custom:
+  defaultStage: dev
+  profiles:
+    dev: nekochans-dev
+  prune:
+    automatic: true
+    number: 3
+
+package:
+  exclude:
+    - .git/**
+    - coverage/**
+    - .idea/**
+    - src/**
+    - node_modules/.bin/**
+    - node_modules/.cache/**
+
+functions:
+  server:
+    handler: dist/lambda.expressHandler
+    events:
+      - http:
+          method: GET
+          path: /
+          cors: true
+      - http:
+          method: GET
+          path: "/{proxy+}"
+          cors: true
